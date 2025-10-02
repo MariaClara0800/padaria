@@ -1,0 +1,142 @@
+/* ===== Estilo Global ===== */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F5E6C4; /* Bege claro */
+    margin: 0;
+    padding: 0;
+    color: #5C3A21; /* Marrom escuro */
+}
+
+/* ===== Cabeçalho ===== */
+header {
+    background-color: #DCC7A1; /* Bege médio */
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    color: #5C3A21;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #5C3A21;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #B77B57; /* Marrom claro */
+}
+
+/* ===== Formulário de Cadastro ===== */
+form {
+    background-color: #FFFFFF;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #DCC7A1;
+    border-radius: 5px;
+}
+
+form button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: #8B5E3C; /* Marrom médio */
+    color: #F5E6C4; /* Bege claro */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #B77B57; /* Marrom claro */
+}
+
+/* ===== Produtos ===== */
+.produtos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.produto-card {
+    background-color: #FFFFFF;
+    border: 1px solid #DCC7A1;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.produto-card:hover {
+    transform: translateY(-5px);
+}
+
+.produto-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.produto-card h3 {
+    margin: 10px 0 5px 0;
+    color: #5C3A21;
+}
+
+.produto-card p {
+    margin: 5px 0;
+}
+
+.produto-card button {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: #8B5E3C; /* Marrom médio */
+    color: #F5E6C4; /* Bege claro */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+
+.produto-card button:hover {
+    background-color: #B77B57; /* Marrom claro */
+}
+
+/* ===== Seção ===== */
+section {
+    padding: 20px;
+    text-align: center;
+}
+
+section h2 {
+    color: #5C3A21;
+}

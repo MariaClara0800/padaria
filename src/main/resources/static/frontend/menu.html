@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu - Padaria</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+    <h1>Padaria Online</h1>
+    <nav>
+        <a href="cadastro.html">Cadastro</a>
+        <a href="carrinho.html">Carrinho (<span id="cart-count">0</span>)</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Menu de Produtos</h2>
+    <div class="produtos"></div>
+</section>
+
+<script>
+    const produtos = [
+        { nome: "Pão Francês", descricao: "Tradicional, quentinho e crocante.", preco: 0.50, imagem: "/images/pao-frances.jpg" },
+        { nome: "Bolo de Cenoura", descricao: "Fofinho, com cobertura de chocolate.", preco: 15.00, imagem: "/images/bolo-cenoura.jpg" },
+        { nome: "Refrigerante Lata", descricao: "Refrigerante gelado de 350ml.", preco: 5.00, imagem: "/images/refrigerante.jpg" },
+        { nome: "Suco natural", descricao: "Suco natural 100ml.", preco: 8.00, imagem: "/images/suco.jpg" },
+        { nome: "Pudim tradicional", descricao: "Pudim tradicional", preco: 10.00, imagem: "/images/pudim.jpg" },
+        { nome: "Coca cola", descricao: "Refrigerante 1l.", preco: 9.00, imagem: "/images/coca.jpg" },
+        { nome: "Croissant", descricao: "Massa amanteigada, macia e saborosa.", preco: 4.00, imagem: "/images/croissant.jpg" }
+    ];
+
+    const produtosContainer = document.querySelector(".produtos");
+    const cartCount = document.getElementById("cart-count");
+
+    // Atualiza o contador do carrinho na página
+    function atualizarContador() {
+        const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        cartCount.textContent = carrinho.length;
+    }
+
+    produtos.forEach(produto => {
+        const card = document.createElement("div");
+        card.classList.add("produto-card");
+        card.innerHTML = `
+            <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
+            <h3>${produto.nome}</h3>
+            <p>${produto.descricao}</p>
+            <p>R$ ${produto.preco.toFixed(2)}</p>
+            <button onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco}, '${produto.imagem}')">Adicionar ao carrinho</button>
+        `;
+        produtosContainer.appendChild(card);
+    });
+
+    function adicionarAoCarrinho(nome, preco, imagem) {
+        let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        carrinho.push({ nome, preco, imagem });
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        atualizarContador();
+        alert(`${nome} adicionado ao carrinho por R$ ${preco.toFixed(2)}!`);
+    }
+
+    // Atualiza contador ao carregar a página
+    atualizarContador();
+</script>
+</body>
+</html>
