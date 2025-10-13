@@ -1,26 +1,109 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Carrinho - Padaria</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 <header>
     <h1>Padaria Online</h1>
     <nav>
-        <a href="cadastro.html">Cadastro</a>
         <a href="menu.html">Menu</a>
+        <a href="carrinho.html">Carrinho (<span id="cart-count">0</span>)</a>
     </nav>
 </header>
 
-<section>
-    <h2>Carrinho</h2>
-    <ul id="cart-items"></ul>
-    <p>Total: R$ <span id="cart-total">0.00</span></p>
-    <button onclick="finalizarCompra()">Finalizar Compra</button>
-</section>
+<main>
+    <section class="carrinho-container">
+        <h2>Carrinho</h2>
 
-<script src="../js/carrinho.js"></script>
+        <ul id="cart-items"></ul>
+
+        <div class="total">
+            <p>Total: R$ <span id="cart-total">0.00</span></p>
+        </div>
+
+        <div class="pagamento-piramide">
+            <h3>Forma de Pagamento</h3>
+            <div class="nivel-1">
+                <label><input type="radio" name="pagamento" value="pix" checked /> Pix</label>
+            </div>
+            <div class="nivel-2">
+                <label><input type="radio" name="pagamento" value="cartao" /> Cartão</label>
+                <label><input type="radio" name="pagamento" value="dinheiro" /> Dinheiro</label>
+            </div>
+        </div>
+
+        <div class="botoes-carrinho">
+            <button type="button" onclick="cancelarCompra()">Cancelar Compra</button>
+            <button type="button" onclick="finalizarCompra()">Finalizar Compra</button>
+        </div>
+    </section>
+</main>
+
+<script>
+    let cart = [];
+
+    function loadCart() {
+        cart = JSON.parse(localStorage.getItem("carrinho")) || [];
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
+
+        cartItems.innerHTML = '';
+
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <img src="${item.imagem}" alt="${item.nome}" width="40" style="vertical-align: middle; margin-right: 10px;" />
+                <strong>${item.nome}</strong> - R$ ${item.preco.toFixed(2)}
+                <button onclick="removerItem(${index})" style="margin-left:10px;">Remover</button>
+            `;
+            cartItems.appendChild(li);
+            total += item.preco;
+        });
+
+        cartTotal.textContent = total.toFixed(2);
+        cartCount.textContent = cart.length;
+    }
+
+    function removerItem(index) {
+        cart.splice(index, 1);
+        localStorage.setItem("carrinho", JSON.stringify(cart));
+        updateCart();
+    }
+
+    function finalizarCompra() {
+        if (cart.length === 0) {
+            alert('Carrinho vazio!');
+            return;
+        }
+
+        const total = cart.reduce((sum, item) => sum + item.preco, 0);
+        alert(`Compra finalizada!\nTotal: R$ ${total.toFixed(2)}`);
+
+        cart = [];
+        localStorage.removeItem("carrinho");
+        updateCart();
+    }
+
+    function cancelarCompra() {
+        if (confirm("Tem certeza que deseja cancelar a compra?")) {
+            cart = [];
+            localStorage.removeItem("carrinho");
+            updateCart();
+            alert("Compra cancelada.");
+        }
+    }
+
+    window.onload = loadCart;
+</script>
 </body>
 </html>

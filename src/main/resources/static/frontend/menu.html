@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Menu - Padaria</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 <header>
     <h1>Padaria Online</h1>
     <nav>
-        <a href="cadastro.html">Cadastro</a>
+        <a href="menu.html">Menu</a>
         <a href="carrinho.html">Carrinho (<span id="cart-count">0</span>)</a>
     </nav>
 </header>
@@ -21,19 +21,18 @@
 
 <script>
     const produtos = [
-        { nome: "Pão Francês", descricao: "Tradicional, quentinho e crocante.", preco: 0.50, imagem: "/images/pao-frances.jpg" },
-        { nome: "Bolo de Cenoura", descricao: "Fofinho, com cobertura de chocolate.", preco: 15.00, imagem: "/images/bolo-cenoura.jpg" },
-        { nome: "Refrigerante Lata", descricao: "Refrigerante gelado de 350ml.", preco: 5.00, imagem: "/images/refrigerante.jpg" },
-        { nome: "Suco natural", descricao: "Suco natural 100ml.", preco: 8.00, imagem: "/images/suco.jpg" },
-        { nome: "Pudim tradicional", descricao: "Pudim tradicional", preco: 10.00, imagem: "/images/pudim.jpg" },
-        { nome: "Coca cola", descricao: "Refrigerante 1l.", preco: 9.00, imagem: "/images/coca.jpg" },
-        { nome: "Croissant", descricao: "Massa amanteigada, macia e saborosa.", preco: 4.00, imagem: "/images/croissant.jpg" }
+        { nome: "Pão Francês", descricao: "Tradicional, quentinho e crocante.", preco: 0.50, imagem: "https://guiadacozinha.com.br/wp-content/uploads/2018/10/paofrancesfolhado.jpg" },
+        { nome: "Bolo de Cenoura", descricao: "Fofinho, com cobertura de chocolate.", preco: 15.00, imagem: "https://guiadacozinha.com.br/wp-content/uploads/2024/05/bolodecenoura-350x230.jpg" },
+        { nome: "Refrigerante Lata", descricao: "Refrigerante gelado de 350ml.", preco: 5.00, imagem: "https://cardapio.nomadasushi.com.br/wp-content/uploads/2024/08/Design-sem-nome-768x768.png" },
+        { nome: "Suco natural", descricao: "Suco natural 100ml.", preco: 8.00, imagem: "https://diariodonordeste.verdesmares.com.br/image/contentid/policy:1.3390911:1688940295/shutterstock_1410613559%20(1).jpg?f=16x9&h=698&w=1280&$p$f$h$w=75d1f77" },
+        { nome: "Pudim tradicional", descricao: "Pudim tradicional", preco: 10.00, imagem: "https://irp.cdn-website.com/33406c6e/dms3rep/multi/pudim-min-3f2f6769.jpg" },
+        { nome: "Coca cola", descricao: "Refrigerante 1l.", preco: 9.00, imagem: "https://covabra.vtexassets.com/arquivos/ids/539842-800-450?v=638925332536270000&width=800&height=450&aspect=true" },
+        { nome: "Croissant", descricao: "Massa amanteigada, macia e saborosa.", preco: 4.00, imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiDtkdyRh2yjlRKvzCN-zboBk2zQt-AqGKzg&s" }
     ];
 
     const produtosContainer = document.querySelector(".produtos");
     const cartCount = document.getElementById("cart-count");
 
-    // Atualiza o contador do carrinho na página
     function atualizarContador() {
         const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
         cartCount.textContent = carrinho.length;
@@ -43,7 +42,7 @@
         const card = document.createElement("div");
         card.classList.add("produto-card");
         card.innerHTML = `
-            <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
+            <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img" />
             <h3>${produto.nome}</h3>
             <p>${produto.descricao}</p>
             <p>R$ ${produto.preco.toFixed(2)}</p>
@@ -60,7 +59,6 @@
         alert(`${nome} adicionado ao carrinho por R$ ${preco.toFixed(2)}!`);
     }
 
-    // Atualiza contador ao carregar a página
     atualizarContador();
 </script>
 </body>
