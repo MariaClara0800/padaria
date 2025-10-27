@@ -1,38 +1,31 @@
 package com.javaLoja.Loja_projeto.infrastructure.entitys;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "tb_padaria")
+@Document(collection = "padarias")
 public class Padaria {
 
+  @Id
+  private String id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-  @Column(name = "nome")
   private String nome;
+  private Double preco;
+  private Integer quantidade;
 
-    @Column(name = "preco")
-    private Double preco;
-    @Column(name = "quantidade")
-    private Integer quantidade;
+  public String getId() { return id; }
 
+  public void setId(String id) { this.id = id; }
 
-    public Long getId(){return id;}
+  public String getNome() { return nome; }
 
-    public void setId(Long id){this.id = id;}
+  public void setNome(String nome) { this.nome = nome; }
 
-    public String getNome(){return  nome;}
+  public Double getPreco() { return preco; }
 
-    public void setNome(String nome){this.nome = nome;}
+  public void setPreco(Double preco) { this.preco = preco; }
 
-    public Double getPreco(){return  preco;}
+  public Integer getQuantidade() { return quantidade; }
 
-    public void setPreco(Double preco){this.preco= preco;}
-
-    public Integer getQuantidade(){return quantidade;}
-
-    public void setQuantidade(Integer quantidade){this.quantidade= quantidade;}
+  public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
 }

@@ -1,11 +1,12 @@
 package com.javaLoja.Loja_projeto.infrastructure.repository;
 
 import com.javaLoja.Loja_projeto.infrastructure.entitys.Usuario;
-import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 import java.util.Optional;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends MongoRepository<Usuario, String> {
 
     Optional<Usuario> findByCpf(String cpf);
 

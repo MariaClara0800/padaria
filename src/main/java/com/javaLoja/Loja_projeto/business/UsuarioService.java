@@ -26,7 +26,7 @@ public class UsuarioService {
 
     }
 
-   public Usuario buscarUsuarioPorid(long id){
+   public Usuario buscarUsuarioPorid(String id){
         return repository.findById(id)
                 .orElseThrow(() -> new  RuntimeException("id nao encontrado"));
    }

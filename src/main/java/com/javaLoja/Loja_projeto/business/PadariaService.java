@@ -19,7 +19,7 @@ public class PadariaService {
         padariaRepository.save(padaria);
     }
 
-    public Padaria buscarPorId(Long id) {
+    public Padaria buscarPorId(String id) {
         return padariaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item de padaria nao encontrado com ID: " + id));
     }
@@ -29,7 +29,7 @@ public class PadariaService {
     }
 
 
-    public void atualizarPadaria(Long id, Padaria novaPadaria) {
+    public void atualizarPadaria(String id, Padaria novaPadaria) {
         Padaria existente = padariaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item de padaria nao encontrado com ID:" + id));
 
@@ -40,7 +40,7 @@ public class PadariaService {
         padariaRepository.save(existente);
     }
 
-    public void deletarPorId(Long id) {
+    public void deletarPorId(String id) {
         if (!padariaRepository.existsById(id)) {
             throw new RuntimeException("Padaria não encontrada com id: " + id);
         }

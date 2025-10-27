@@ -31,7 +31,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> buscarUsuarioPorid(@RequestParam Long id) {
+    public ResponseEntity<Usuario> buscarUsuarioPorid(@RequestParam String id) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorid(id));
     }
 

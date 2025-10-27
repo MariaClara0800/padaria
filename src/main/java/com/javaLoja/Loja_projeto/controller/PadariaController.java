@@ -23,7 +23,7 @@ public class PadariaController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Padaria> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Padaria> buscarPorId(@PathVariable String id) {
         Padaria padaria = padariaService.buscarPorId(id);
         return ResponseEntity.ok(padaria);
     }
@@ -33,13 +33,13 @@ public class PadariaController {
         return ResponseEntity.ok(padariaService.listarTodos());
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarPadaria(@PathVariable Long id, @RequestBody Padaria padaria) {
+    public ResponseEntity<Void> atualizarPadaria(@PathVariable String id, @RequestBody Padaria padaria) {
         padariaService.atualizarPadaria(id, padaria);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarPorId(@PathVariable String id) {
         padariaService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }
