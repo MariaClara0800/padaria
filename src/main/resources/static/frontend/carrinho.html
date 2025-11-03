@@ -4,6 +4,203 @@
     <meta charset="UTF-8">
     <title>Carrinho - Padaria</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* ===== Estilo geral (mesmo padrão da tela de cadastro) ===== */
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #fff;
+            width: 100%;
+            padding: 20px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            color: #6b3e26;
+            margin-bottom: 10px;
+        }
+
+        nav a {
+            color: #6b3e26;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            background-color: #fff;
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h2 {
+            color: #6b3e26;
+            text-align: center;
+        }
+
+        #cart-items {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        #cart-items li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        #cart-items button {
+            background: none;
+            border: none;
+            color: #d9534f;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #cart-items button:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #cart-total {
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            background-color: #8b4513; /* marrom igual ao botão de cadastro */
+            transition: background 0.3s;
+        }
+
+        .buttons button:hover {
+            background-color: #703710;
+        }
+
+        .cancelar {
+            background-color: #d9534f;
+        }
+
+        .cancelar:hover {
+            background-color: #b52b27;
+        }
+
+        .pagamento {
+            margin-top: 30px;
+        }
+
+        .pagamento h3 {
+            text-align: center;
+            color: #6b3e26;
+        }
+
+        .opcoes-pagamento {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .opcoes-pagamento label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .qrcode {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .qrcode img {
+            width: 150px;
+            height: 150px;
+        }
+
+        /* ===== Comprovante de Compra ===== */
+        #comprovante {
+            display: none;
+            margin-top: 30px;
+            background: #fffaf5;
+            border: 1px solid #e0c9a6;
+            border-radius: 8px;
+            padding: 20px;
+            color: #4e342e;
+        }
+
+        #comprovante h3 {
+            text-align: center;
+            color: #6b3e26;
+        }
+
+        #comprovante ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #comprovante li {
+            border-bottom: 1px dashed #ddd;
+            padding: 5px 0;
+        }
+
+        .comprovante-botoes {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .comprovante-botoes button {
+            background-color: #8b4513;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .comprovante-botoes button:hover {
+            background-color: #703710;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -14,13 +211,150 @@
     </nav>
 </header>
 
-<section>
+<main>
     <h2>Carrinho</h2>
     <ul id="cart-items"></ul>
     <p>Total: R$ <span id="cart-total">0.00</span></p>
-    <button onclick="finalizarCompra()">Finalizar Compra</button>
-</section>
 
-<script src="../js/carrinho.js"></script>
+    <div class="pagamento">
+        <h3>Formas de Pagamento</h3>
+        <div class="opcoes-pagamento">
+            <label><input type="radio" name="pagamento" value="pix"> PIX (QR Code)</label>
+            <label><input type="radio" name="pagamento" value="credito"> Cartão de Crédito</label>
+            <label><input type="radio" name="pagamento" value="debito"> Cartão de Débito</label>
+        </div>
+        <div class="qrcode" id="qrcode-container">
+            <p>Escaneie o QR Code para pagar:</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?data=PadariaOnlinePIX&size=150x150" alt="QR Code PIX">
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button id="finalizar-compra">Finalizar Compra</button>
+        <button class="cancelar" id="cancelar-compra">Cancelar Compra</button>
+    </div>
+
+    <!-- Comprovante -->
+    <div id="comprovante">
+        <h3>Comprovante de Compra</h3>
+        <p><strong>Padaria Online</strong></p>
+        <p id="data-compra"></p>
+        <ul id="itens-compra"></ul>
+        <p><strong>Total:</strong> R$ <span id="valor-compra"></span></p>
+        <p><strong>Pagamento:</strong> <span id="pagamento-compra"></span></p>
+        <div class="comprovante-botoes">
+            <button onclick="window.print()">Imprimir</button>
+            <button id="baixarPDF">Baixar PDF</button>
+        </div>
+    </div>
+</main>
+
+<script>
+    const itens = JSON.parse(localStorage.getItem('carrinho')) || [
+        { nome: 'Pão Francês', preco: 1.50 },
+        { nome: 'Bolo de Cenoura', preco: 12.00 }
+    ];
+
+    const lista = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+
+    function atualizarCarrinho() {
+        lista.innerHTML = '';
+        let total = 0;
+
+        if (itens.length === 0) {
+            lista.innerHTML = '<li style="text-align:center; color:#999;">Seu carrinho está vazio.</li>';
+            totalEl.textContent = '0.00';
+            return;
+        }
+
+        itens.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
+                <button onclick="removerItem(${index})">Excluir</button>
+            `;
+            lista.appendChild(li);
+            total += item.preco;
+        });
+
+        totalEl.textContent = total.toFixed(2);
+    }
+
+    function removerItem(index) {
+        itens.splice(index, 1);
+        localStorage.setItem('carrinho', JSON.stringify(itens));
+        atualizarCarrinho();
+    }
+
+    function finalizarCompra() {
+        const pagamentoSelecionado = document.querySelector('input[name="pagamento"]:checked');
+        if (!pagamentoSelecionado) {
+            alert('Por favor, selecione uma forma de pagamento.');
+            return;
+        }
+
+        if (pagamentoSelecionado.value === 'pix') {
+            document.getElementById('qrcode-container').style.display = 'block';
+            alert('Escaneie o QR Code e finalize o pagamento.');
+        } else {
+            document.getElementById('qrcode-container').style.display = 'none';
+        }
+
+        gerarComprovante(pagamentoSelecionado.value);
+        localStorage.removeItem('carrinho');
+        atualizarCarrinho();
+    }
+
+    function cancelarCompra() {
+        if (confirm('Tem certeza de que deseja cancelar a compra?')) {
+            localStorage.removeItem('carrinho');
+            atualizarCarrinho();
+            document.getElementById('comprovante').style.display = 'none';
+        }
+    }
+
+    function gerarComprovante(formaPagamento) {
+        const comprovante = document.getElementById('comprovante');
+        const listaComprovante = document.getElementById('itens-compra');
+        const valorCompra = document.getElementById('valor-compra');
+        const pagamentoCompra = document.getElementById('pagamento-compra');
+        const dataCompra = document.getElementById('data-compra');
+
+        const agora = new Date();
+        const dataFormatada = agora.toLocaleString('pt-BR', {
+            dateStyle: 'short',
+            timeStyle: 'short'
+        });
+
+        dataCompra.textContent = `Data: ${dataFormatada}`;
+        listaComprovante.innerHTML = '';
+
+        let total = 0;
+        itens.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+            listaComprovante.appendChild(li);
+            total += item.preco;
+        });
+
+        valorCompra.textContent = total.toFixed(2);
+        pagamentoCompra.textContent =
+            formaPagamento === 'pix' ? 'PIX' :
+                formaPagamento === 'credito' ? 'Cartão de Crédito' : 'Cartão de Débito';
+
+        comprovante.style.display = 'block';
+    }
+
+    document.getElementById('finalizar-compra').addEventListener('click', finalizarCompra);
+    document.getElementById('cancelar-compra').addEventListener('click', cancelarCompra);
+
+    atualizarCarrinho();
+
+    // Geração simples de PDF usando print (ou pode-se usar bibliotecas)
+    document.getElementById('baixarPDF').addEventListener('click', () => {
+        window.print();
+    });
+</script>
 </body>
 </html>
