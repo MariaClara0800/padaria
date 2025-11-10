@@ -190,7 +190,7 @@
         <div class="form-group">
             <label for="dataNascimento">Data de Nascimento</label>
             <input type="date" id="dataNascimento" required>
-            <div class="error-message" id="dataNascimento-error">Você deve ter pelo menos 18 anos para se cadastrar</div>
+            <div class="error-message" id="dataNascimento-error">Você deve ter pelo menos 18 anos</div>
         </div>
 
         <div class="form-group">
@@ -217,229 +217,50 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById("form-cadastro");
-        const cpfInput = document.getElementById('cpf');
-        const telefoneInput = document.getElementById('telefone');
-        const dataNascimentoInput = document.getElementById('dataNascimento');
-        const emailInput = document.getElementById('email');
-        const nomeInput = document.getElementById('nome');
-        const submitButton = document.querySelector('.btn-submit');
         const successMessage = document.getElementById('success-message');
 
-        // Máscara para CPF
-        cpfInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        // Envia os dados validados para o backend
+        async function enviarCadastro(cliente) {
+            try {
+                const resposta = await fetch("http://localhost:8080/usuarios", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(cliente)
+                });
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao enviar dados para o servidor");
+                }
+
+                const dados = await resposta.json();
+                console.log("Cliente cadastrado:", dados);
+
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                // Redireciona após 2 segundos
+                setTimeout(() => {
+                    window.location.href = "menu.html";
+                }, 2000);
+
+            } catch (erro) {
+                alert("❌ Falha ao conectar ao servidor. Verifique se o backend está rodando.");
+                console.error(erro);
             }
-            e.target.value = value;
-
-            // Validação em tempo real
-            if (value.length === 14) {
-                validateCPF(value);
-            }
-        });
-
-        // Máscara para telefone
-        telefoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            }
-            e.target.value = value;
-
-            // Validação em tempo real
-            if (value.length === 15) {
-                validateTelefone(value);
-            }
-        });
-
-        // Validação de e-mail em tempo real
-        emailInput.addEventListener('blur', function() {
-            validateEmail(emailInput.value);
-        });
-
-        // Validação de nome em tempo real
-        nomeInput.addEventListener('blur', function() {
-            validateNome(nomeInput.value);
-        });
-
-        // Validação de data de nascimento em tempo real
-        dataNascimentoInput.addEventListener('change', function() {
-            validateDataNascimento(dataNascimentoInput.value);
-        });
-
-        // Funções de validação
-        function validateCPF(cpf) {
-            const cpfError = document.getElementById('cpf-error');
-            const cpfLimpo = cpf.replace(/\D/g, '');
-
-            // Verifica se o CPF tem 11 dígitos
-            if (cpfLimpo.length !== 11) {
-                showError(cpfInput, cpfError, 'CPF deve ter 11 dígitos');
-                return false;
-            }
-
-            // Verifica se todos os dígitos são iguais (CPF inválido)
-            if (/^(\d)\1{10}$/.test(cpfLimpo)) {
-                showError(cpfInput, cpfError, 'CPF inválido');
-                return false;
-            }
-
-            // Validação dos dígitos verificadores
-            let soma = 0;
-            let resto;
-
-            for (let i = 1; i <= 9; i++) {
-                soma += parseInt(cpfLimpo.substring(i-1, i)) * (11 - i);
-            }
-
-            resto = (soma * 10) % 11;
-            if ((resto === 10) || (resto === 11)) resto = 0;
-            if (resto !== parseInt(cpfLimpo.substring(9, 10))) {
-                showError(cpfInput, cpfError, 'CPF inválido');
-                return false;
-            }
-
-            soma = 0;
-            for (let i = 1; i <= 10; i++) {
-                soma += parseInt(cpfLimpo.substring(i-1, i)) * (12 - i);
-            }
-
-            resto = (soma * 10) % 11;
-            if ((resto === 10) || (resto === 11)) resto = 0;
-            if (resto !== parseInt(cpfLimpo.substring(10, 11))) {
-                showError(cpfInput, cpfError, 'CPF inválido');
-                return false;
-            }
-
-            hideError(cpfInput, cpfError);
-            return true;
-        }
-
-        function validateTelefone(telefone) {
-            const telefoneError = document.getElementById('telefone-error');
-            const telefoneLimpo = telefone.replace(/\D/g, '');
-
-            // Verifica se o telefone tem 10 ou 11 dígitos
-            if (telefoneLimpo.length < 10 || telefoneLimpo.length > 11) {
-                showError(telefoneInput, telefoneError, 'Telefone deve ter 10 ou 11 dígitos');
-                return false;
-            }
-
-            hideError(telefoneInput, telefoneError);
-            return true;
-        }
-
-        function validateEmail(email) {
-            const emailError = document.getElementById('email-error');
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!emailRegex.test(email)) {
-                showError(emailInput, emailError, 'Por favor, insira um e-mail válido');
-                return false;
-            }
-
-            hideError(emailInput, emailError);
-            return true;
-        }
-
-        function validateNome(nome) {
-            const nomeError = document.getElementById('nome-error');
-
-            if (nome.trim().length < 3) {
-                showError(nomeInput, nomeError, 'Nome deve ter pelo menos 3 caracteres');
-                return false;
-            }
-
-            hideError(nomeInput, nomeError);
-            return true;
-        }
-
-        function validateDataNascimento(data) {
-            const dataError = document.getElementById('dataNascimento-error');
-            const dataNascimento = new Date(data);
-            const hoje = new Date();
-            const idade = hoje.getFullYear() - dataNascimento.getFullYear();
-            const mes = hoje.getMonth() - dataNascimento.getMonth();
-
-            // Verifica se a pessoa tem pelo menos 18 anos
-            if (idade < 18 || (idade === 18 && mes < 0) || (idade === 18 && mes === 0 && hoje.getDate() < dataNascimento.getDate())) {
-                showError(dataNascimentoInput, dataError, 'Você deve ter pelo menos 18 anos para se cadastrar');
-                return false;
-            }
-
-            hideError(dataNascimentoInput, dataError);
-            return true;
-        }
-
-        function showError(inputElement, errorElement, message) {
-            inputElement.classList.add('invalid');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            submitButton.disabled = true;
-        }
-
-        function hideError(inputElement, errorElement) {
-            inputElement.classList.remove('invalid');
-            errorElement.style.display = 'none';
-
-            // Habilita o botão apenas se todos os campos estiverem válidos
-            const errors = document.querySelectorAll('.error-message');
-            const hasErrors = Array.from(errors).some(error => error.style.display === 'block');
-            submitButton.disabled = hasErrors;
-        }
-
-        function redirectToMenu() {
-            // Simula um tempo de processamento antes do redirecionamento
-            setTimeout(function() {
-                // Aqui você deve colocar a URL real da página do menu
-                window.location.href = "menu.html";
-
-                // Para demonstração, se a página menu.html não existir, mostra um alerta
-                // window.location.href = "#"; // Descomente esta linha se quiser testar sem erro
-            }, 2000); // 2 segundos de delay para o usuário ver a mensagem de sucesso
         }
 
         form.addEventListener("submit", function(e) {
             e.preventDefault();
 
-            // Valida todos os campos
-            const nomeValido = validateNome(nomeInput.value);
-            const cpfValido = validateCPF(cpfInput.value);
-            const dataValida = validateDataNascimento(dataNascimentoInput.value);
-            const emailValido = validateEmail(emailInput.value);
-            const telefoneValido = validateTelefone(telefoneInput.value);
+            const nome = document.getElementById("nome").value;
+            const cpf = document.getElementById("cpf").value;
+            const dataNascimento = document.getElementById("dataNascimento").value;
+            const email = document.getElementById("email").value;
+            const telefone = document.getElementById("telefone").value;
 
-            // Se todos os campos são válidos
-            if (nomeValido && cpfValido && dataValida && emailValido && telefoneValido) {
-                // Captura os dados
-                const nome = nomeInput.value;
-                const cpf = cpfInput.value;
-                const dataNascimento = dataNascimentoInput.value;
-                const email = emailInput.value;
-                const telefone = telefoneInput.value;
+            const cliente = { nome, cpf, dataNascimento, email, telefone };
 
-                // Aqui você pode enviar os dados para o backend
-                console.log('Dados do cadastro:', {
-                    nome,
-                    cpf,
-                    dataNascimento,
-                    email,
-                    telefone
-                });
-
-                // Esconde o formulário e mostra mensagem de sucesso
-                form.style.display = 'none';
-                successMessage.style.display = 'block';
-
-                // Redireciona para a página do menu após 2 segundos
-                redirectToMenu();
-            } else {
-                alert('Por favor, corrija os erros no formulário antes de enviar.');
-            }
+            enviarCadastro(cliente);
         });
     });
 </script>
