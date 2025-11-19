@@ -37,7 +37,7 @@ const produtosContainer = document.querySelector(".produtos");
 // Função para criar os cards de produto
 produtos.forEach(produto => {
     const card = document.createElement("div");
-    card.classList.add("produto-card");
+    card.classList.add("produto-card");w
     card.innerHTML = `
         <h3>${produto.nome}</h3>
         <p>${produto.descricao}</p>

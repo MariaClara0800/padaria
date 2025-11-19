@@ -32,6 +32,7 @@ public class PadariaService {
     public void atualizarPadaria(String id, Padaria novaPadaria) {
         Padaria existente = padariaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item de padaria nao encontrado com ID:" + id));
+existente.setImagens(novaPadaria.getImagens());
 
         existente.setNome(novaPadaria.getNome());
         existente.setPreco(novaPadaria.getPreco());
