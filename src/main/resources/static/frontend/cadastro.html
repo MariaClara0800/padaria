@@ -232,7 +232,7 @@
                     throw new Error("Erro ao enviar dados para o servidor");
                 }
 
-                const dados = await resposta.json();
+                const dados = await resposta.text();
                 console.log("Cliente cadastrado:", dados);
 
                 form.style.display = 'none';
